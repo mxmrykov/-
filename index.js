@@ -134,7 +134,6 @@ const Golangify = () => {
   d.body.appendChild(sectionGlobal)
   d.body.appendChild(sectionRoot)
   let root = d.getElementById("root")
-  let theoryParent = d.getElementById("theory-all")
 
   if (activeMenuItem === null) {
     localStorage.setItem("activeMenuItem", "THEORY");
@@ -178,6 +177,13 @@ const Golangify = () => {
       }
   }
   })
+
+  const startTestButton = d.createElement("button")
+  startTestButton.setAttribute("class", "startTestBtn")
+  startTestButton.setAttribute("id", "startTestBtn")
+  startTestButton.setAttribute("onclick", "startTest();")
+  startTestButton.innerHTML = "Начать тест"
+  d.getElementById("test-all").appendChild(startTestButton)
 }
 
 function fillBgElems(r, c) {
@@ -278,4 +284,58 @@ function setMenuItem(type) {
       quests.prepend(currentCard)
       currentCard.classList.toggle("animatePrev")
     }, 1000);
+  }
+
+  function startTest() {
+    const content = d.getElementById("test-all")
+    const btn = d.getElementById("startTestBtn")
+    const backTimer = d.createElement("h1")
+    backTimer.setAttribute("class", "fadeInBeginPos")
+    backTimer.style.fontSize = "2.0rem"
+    backTimer.innerHTML = "3"
+    btn.classList.toggle("fadeOut")
+    setTimeout(() => {
+      content.removeChild(btn)
+    }, 1000);
+
+    content.appendChild(backTimer);
+
+    function animateText(text) {
+      return new Promise((resolve) => {
+          backTimer.innerHTML = text;
+          backTimer.classList.add("fadeIn");
+            setTimeout(() => {
+                backTimer.classList.remove("fadeIn");
+                backTimer.classList.add("fadeOut");
+                setTimeout(() => {
+                    backTimer.classList.remove("fadeOut");
+                    resolve();
+                }, 1000);
+            }, 1000);
+        });
+    }
+  
+    async function runAnimations() {
+      await animateText("3");
+      await animateText("2");
+      await animateText("1");
+      await animateText("БЭЭ!");
+      content.removeChild(backTimer)
+
+      const contest = d.createElement("section")
+      contest.setAttribute("class", "test-field")
+      let testVars = [];
+      //array.splice(index, 1);
+      for (id in questions.test) {
+        testVars.push(questions.test[id])
+      }
+      
+    }
+    setTimeout(runAnimations, 1000);
+  }
+
+  function getRandomInt(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
   }
