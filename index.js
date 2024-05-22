@@ -3,30 +3,79 @@ let activeMenuItem = localStorage.getItem("activeMenuItem");
 
 const questions = {
   "test": 
-  {
-
-  },
+  [
+    {
+      "question": "Какой размер стека горутины на языке Go?",
+      "answer": "2Кб и 4Кб на x32 и x64 машинах соответственно"
+    },
+    {
+      "question": "Перечислите основные примитивы синхронизации на Go (3):",
+      "answer": ["Mutex", "Atomic", "WaitGroup"]
+    },
+    {
+      "question": "В чем различие Mutex и RWMutex?",
+      "answer": "Неблокируемое чтение"
+    }, 
+    {
+      "question": "Какой максимальный размер heap на x32 и x64 машинах соответственно?",
+      "answer": "256Мб и 1Гб"
+    }, 
+    {
+      "question": "В какой момент первично запускается сборщик мусора, и сколько ресурсов процессора потребляет STW?",
+      "answer": "Через 2 минуты после запуска программы, 25%"
+    }, 
+    {
+      "question": "Что такое STW? Где используется?",
+      "answer": "Stop The World, сборщик мусора"
+    }, 
+    {
+      "question": "Произойдет при попытке чтения из пустого канала?",
+      "answer": "Deadlock"
+    }, 
+    {
+      "question": "Произойдет при попытке чтения из закрытого канала?",
+      "answer": "Нулевое значение для типа канала"
+    }, 
+    {
+      "question": "Произойдет при попытке чтения из закрытого канала?",
+      "answer": "Нулевое значение для типа канала"
+    }, 
+    {
+      "question": "Назовите два типа каналов в go",
+      "answer": ["буферезированные", "небуферезированные"]
+    }
+  ],
   "theory":
   [
       {
-          "text": "Базовый размер стека горутины на языке Go зависит от разрядности операционной системы. На 32-битных машинах базовый размер равен 2Кб, на 64-битных - 4Кб соответственно.",
-          "key": "Размер стека"
+        "text": "Базовый размер стека горутины на языке Go зависит от разрядности операционной системы. На 32-битных машинах базовый размер равен 2Кб, на 64-битных - 4Кб соответственно."
       },
       {
-          "text": "Для очистки мусора используется алгоритм Mark & Sweep, он же трехцветный. Основан на алгоритме Дийкстры, в результате работы которого остаются только \"черные\" и \"белые\" элементы. Белые удаляются сборщиком мусора, черные остаются в памяти программы. Процесс отсановки программы для запуска подсчета объектов в рантайме называется STW (Stop The World) и занимает примерно 25% ресурсов процессора.",
-          "key": "Сборщик мусора"
+        "text": "Для очистки мусора используется алгоритм Mark & Sweep, он же трехцветный. Основан на алгоритме Дийкстры, в результате работы которого остаются только \"черные\" и \"белые\" элементы. Белые удаляются сборщиком мусора, черные остаются в памяти программы. Процесс отсановки программы для запуска подсчета объектов в рантайме называется STW (Stop The World) и занимает примерно 25% ресурсов процессора."
       },
       {
-        "text": "Сборщик мусора первично запускается через 2 минуты после начала работы программы. Далее каждый раз, когда размер кучи (heap) превышает свой предыдущий размер в 2 раза.",
-        "key": "Запуск сборщика мусора"
+        "text": "Сборщик мусора первично запускается через 2 минуты после начала работы программы. Далее каждый раз, когда размер кучи (heap) превышает свой предыдущий размер в 2 раза."
       },
       {
-        "text": "Сборщик мусора первично запускается через 2 минуты после начала работы программы. Далее каждый раз, когда размер кучи (heap) превышает свой предыдущий размер в 2 раза.",
-        "key": "Запуск сборщика мусора"
+        "text": "Атомики в Go являются самым меньшим, 'атомарным' примитивом синхронизации. Они работают на самом низком уровне, за счет сброса кэша уровня L2 процессора. Служат для самых базовых синхронных операций. На них построены такие синхронизаторы, как: Mutex (RWMutex), WaitGroup, и все вытекающие. К синхронизации так же можно отнести каналы."
       },
       {
-        "text": "Сборщик мусора первично запускается через 2 минуты после начала работы программы. Далее каждый раз, когда размер кучи (heap) превышает свой предыдущий размер в 2 раза.",
-        "key": "Запуск сборщика мусора"
+        "text": "Различие между Mutex и RWMutex заключается в неблокируемом чтении блока памяти при стековом чтении. Иначе говоря, при обычном Mutex, чтение с блока памяти будет блокировать все остальные ресурсы, так же как и запись. Это сильно задерживает работу системы. RWMutex решает этот вопрос: сначала идет стековая запись, потом стековое параллельное чтение."
+      },
+      {
+        "text": "Слайс де-факто представляет собой обычный массив, в структуре которого появляется capacity. Если базовый массив имеет лишь указатель на первый его элемент и длину самого массива, то слайс обладает свойством динамического массива за счет аллокации новой памяти при первышении длины его вместимости. В обычных случаях реаллокация памяти происходит по формуле capacity = length * 2, однако если длина превысила 256 - аллокация проходит по формуле newcap += (newcap + 3*threshold) >> 2. То есть увеличение в 1.25x раза."
+      },
+      {
+        "text": "Вся память в Go делиться на 2 группы: стек и куча (heap). По факту стек тоже хранится в куче, однако он является выделенной под особые нужды памятью. В основном стек используется для работы с функциями: передача и возврат значений, инициализация по эклемпляру внутри функциии. Куча по факту объясняет свое название: в ней данные хранятся до начала работы сборщика мусора. Макс. размер кучи - 256Мб и 1Гб для x32 и x64 разрядных систем соответственно."
+      },
+      {
+        "text": "Если вы попытаетесь считать данные из канала, но в канале будут отсутствовать данные, планировщик заблокирует текущую горутину и разблокирует другую в надежде, что какая-либо горутина передаст данные в канал. То же самое произойдет в случае отправки данных: планировщик заблокирует передающую горутину, пока другая не считает данные из канала."
+      },
+      {
+        "text": "Канал — это объект связи, с помощью которого горутины обмениваются данными. Технически это конвейер (или труба), откуда можно считывать или помещать данные. То есть одна горутина может отправить данные в канал, а другая — считать помещенные в этот канал данные. При попытке чтения из закрытого канала будет возвращаться нулевое значение типа, который используется в канале."
+      },
+      {
+        "text": "В Go существуют два типа каналов: буферизированные (buffered) и небуферизированные (unbuffered). Каналы реализованы как структуры, содержащие кольцевой буфер, указатели на отправителей и получателей, а также мьютексы для синхронизации доступа. Каналы используются для безопасного обмена данными между горутинами."
       }
   ]
 }
@@ -174,53 +223,59 @@ function setMenuItem(type) {
 }
 
   function fillTheoryBlock() {
-    let theoryParent = d.getElementById("theory-all")
+    const theoryParent = d.getElementById("theory-all")
+    const questionsParent = d.createElement("div")
+    const nextPrevParent = d.createElement("div")
+    const buttons = [
+      d.createElement("button"),
+      d.createElement("button")
+    ]
+
+    nextPrevParent.setAttribute("class", "next-prev-parent")
+    buttons[0].setAttribute("onclick", "prevCard();")
+    buttons[0].innerHTML = "&lt; Назад"
+    buttons[1].setAttribute("onclick", "nextCard();")
+    buttons[1].innerHTML = "Вперед &gt;"
+
+    nextPrevParent.appendChild(buttons[0])
+    nextPrevParent.appendChild(buttons[1])
+
+    questionsParent.setAttribute("class", "questions")
+    questionsParent.setAttribute("id", "questions")
+
     questions?.theory?.map((val, id) => {
-    //   style="
-    //   transform: rotate(-${id*2}deg); 
-    //   opacity: ${id > 3 ? 0 : (100 / (id + 1)) / 100}; 
-    //   z-index: ${100-id}; 
-    //   top: ${-200*id}px;
-    //   ${id + 1 === questions?.theory?.length ? `margin-bottom: -${200*id}px` : null}
-    // "
-      theoryParent.innerHTML += `<article class="question" id="q-${id}">
-      <h4>
-      ${val.text}
-      </h4>
-      </article>`
+      const question = d.createElement("article")
+      question.setAttribute("class", "question")
+      question.setAttribute("id", `q-${id}`)
+
+      const innerQuestionH = d.createElement("h4")
+      innerQuestionH.innerHTML = val.text
+
+      question.appendChild(innerQuestionH)
+      questionsParent.append(question)
     })
-    theoryParent.innerHTML += `
-      <div class="next-prev-parent">
-        <button>
-        &lt; Назад
-        </button>
-        <button onclick="nextCard();">
-        Вперед &gt;
-        </button>
-      </div>
-    `
+    theoryParent.appendChild(questionsParent)
+    theoryParent.appendChild(nextPrevParent)
   }
   
   function nextCard() {
-    let currentCard = d.querySelectorAll(".question")[0];
-    let copyCurrent = currentCard;
-    currentCard.classList.toggle("animation_changeCard");
-  
+    const currentCard = d.querySelectorAll(".question")[0];
+    const copyCurrent = currentCard;
+    const quests = d.getElementById("questions")
+    currentCard.classList.toggle("animateNext")
     setTimeout(() => {
-      currentCard.parentNode.removeChild(currentCard);
-      for (let i = 0; i < 4; i ++) {
-        // d.querySelectorAll(".question")[i].style.transform = `rotate(-${i*2}deg)`;
-        // d.querySelectorAll(".question")[i].style.opacity = `${i > 3 ? 0 : (100 / (i + 1)) / 100}`;
-        // d.querySelectorAll(".question")[i].style.zIndex = `${100-i}`;
-        // d.querySelectorAll(".question")[i].style.top = `${-200*i}px`;
-      }
-      // copyCurrent.style.transform = `rotate(-${(qLen-1)*2}deg)`;
-      // copyCurrent.style.opacity = `${(qLen-1) > 3 ? 0 : (100 / ((qLen-1) + 1)) / 100}`;
-      // copyCurrent.style.zIndex = `${100-(qLen-1)}`;
-      // copyCurrent.style.top = `${-200*(qLen-1)}px`;
-      d.getElementById("theory-all").insertBefore(copyCurrent, d.getElementById("theory-all").childNodes[qLen])
-      // d.querySelectorAll(".question")[qLen - 2].style.marginBottom = `0px`;
-      // d.querySelectorAll(".question")[qLen - 1].style.marginBottom = `-${200*(qLen - 1)}px`;
-      d.querySelectorAll(".question")[qLen - 1].classList.toggle("animation_changeCard");
-    }, 600);
+      quests.removeChild(currentCard)
+      copyCurrent.classList.toggle("animateNext")
+      quests.appendChild(copyCurrent)
+    }, 550);
+  }
+
+  function prevCard() {
+    const currentCard = d.querySelectorAll(".question")[qLen - 1];
+    const quests = d.getElementById("questions")
+    currentCard.classList.toggle("animatePrev")
+    setTimeout(() => {
+      quests.prepend(currentCard)
+      currentCard.classList.toggle("animatePrev")
+    }, 1000);
   }

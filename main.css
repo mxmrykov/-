@@ -116,63 +116,59 @@ header h1 {
 
 .theory-all, .test-all {
     animation: fadeIn 0.5s ease-in forwards alternate;
-    color: white;
     background-color: rgba(255, 255, 255, 0.144);
     width: 550px;
-    max-width: 95%;
-    border-radius: 10px;
-    padding: 25px;
-    margin: 0 auto;
-    backdrop-filter: blur(10px);
+    max-width: 90%;
+    padding: 20px;
     height: 320px;
-
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    margin: 0 auto;
+    color: white;
 }
 
-.theory-all article:first-child {
-    transform: rotate(0);
-    opacity: 1.0;
-    z-index: 100;
-    top: 0;
+.questions {
+    position: relative;
 }
-
-.theory-all article:nth-child(2) {
-    transform: rotate(-2deg);
-    opacity: 0.5;
-    z-index: 99;
-    top: -200px;
-}
-
-.theory-all article:nth-child(3) {
-    transform: rotate(-4deg);
-    opacity: 0.33;
-    z-index: 98;
-    top: -400px;
-}
-
-.theory-all article:nth-child(4) {
-    transform: rotate(-6deg);
-    opacity: 0.25;
-    z-index: 97;
-    top: -600px;
-}
-
-.theory-all article:nth-child(5) {
-    opacity: 0;
-    top: -800px;
-    margin-bottom: -800px;
-}
-
 
 .question {
     background-color: rgb(7, 95, 167);
     padding: 10px 15px;
     border-radius: 10px;
     backdrop-filter: blur(3px);
-    height: 200px;
+    height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    position: absolute;
+}
+
+.question:first-child {
+    opacity: 1.0;
+    transform: rotate(0);
+    z-index: 100;
+}
+
+.question:nth-child(2) {
+    opacity: 0.5;
+    transform: rotate(-2deg);
+    z-index: 99;
+}
+
+.question:nth-child(3) {
+    opacity: 0.33;
+    transform: rotate(-4deg);
+    z-index: 98;
+}
+
+.question:nth-child(4) {
+    opacity: 0.25;
+    transform: rotate(-6deg);
+    z-index: 97;
+}
+
+.question:nth-child(n+5) {
+    opacity: 0.0;
 }
 
 .next-prev-parent {
@@ -180,10 +176,8 @@ header h1 {
     align-items: center;
     justify-content: center;
     position: relative;
-    bottom: -25px;
+    margin-top: 240px;
 }
-
-
 
 .next-prev-parent button {
     border-radius: 10px;
@@ -203,7 +197,14 @@ header h1 {
     margin-right: 10px;
 }
 
-.animation_changeCard { animation: changeCard_CardCurrent 1s ease-in-out forwards; }
+.animateNext {
+    animation: nextCardAnimation 1s linear forwards;
+}
+
+.animatePrev {
+    animation: prevCardAnimation 1s linear forwards;
+}
+
 
 @keyframes fadeIn {
     0% {
@@ -217,24 +218,47 @@ header h1 {
     }
 }
 
-@keyframes changeCard_CardCurrent {
+@keyframes nextCardAnimation {
     0% {
-        transform: rotate(0deg);
         opacity: 1.0;
+        transform: rotate(0);
         z-index: 100;
     }
 
-    30% {
-        transform: rotate(10deg) translateY(-100px) scale(1.1);
-        z-index: 100;
+    25% {
+        transform: rotate(10deg) translateY(-60px);
     }
 
-    80% {
-        z-index: 80;
+    75% {
+        z-index: 90;
+        opacity: 0.25;
     }
-    
+
     100% {
-        transform: rotate(-6deg);
-        z-index: 10;
+        transform: rotate(-6deg) translateY(0);
+    }
+}
+
+@keyframes prevCardAnimation {
+    0% {
+        opacity: 0.0;
+        transform: rotate(-6deg) translateY(0);
+        z-index: 90;
+    }
+
+    25% {
+        transform: rotate(10deg) translateY(-60px);
+    }
+
+    75% {
+        z-index: 110;
+        transform: rotate(0) translateY(0);
+        opacity: 1.0;
+    }
+
+    100% {
+        z-index: 110;
+        transform: rotate(0) translateY(0);
+        opacity: 1.0;
     }
 }
